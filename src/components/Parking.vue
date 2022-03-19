@@ -1,11 +1,16 @@
 <template>
   <ol v-for="car in carList" :key="car.id">
-    <ul>{{ car.plate }} <button @click="getCar(car.plate)">Ver reservas</button></ul>
+    <ul>
+      {{
+        car.plate
+      }}
+      <button class="button is-primary" @click="getCar(car.plate)">Ver reservas</button>
+    </ul>
   </ol>
   <div>
     <ol v-for="(info, index) in carInfo.reservations" :key="index">
-      <li>Código: {{info.code}}</li>
-      <li>Tempo: {{info.time}}</li>
+      <li>Código: {{ info.code }}</li>
+      <li>Tempo: {{ info.time }}</li>
     </ol>
   </div>
 </template>
