@@ -7,4 +7,4 @@ services:
       - '8080:8080'
     volumes:
       - ./:/app
-    command: 'yarn start'
+    command: 'yarn serve'
