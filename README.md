@@ -2,23 +2,13 @@
 
 ## Project setup
 ```
-yarn install
+docker-compose build
 ```
 
 ### Compiles and hot-reloads for development
 ```
-yarn serve
+docker-compose up app
 ```
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Back-end
+See [Parking Manager](https://github.com/ValterAndrei/parking_manager/).
