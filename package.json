@@ -38,7 +38,8 @@
         "error",
         {
           "ignores": [
-            "Parking"
+            "Parking",
+            "Reservation"
           ]
         }
       ]

@@ -36,6 +36,8 @@
       </div>
 
       <div class="table-container">
+        <!-- <Reservation :list="carInfo.reservations"/> -->
+
         <table class="table">
           <thead>
             <tr>
@@ -75,6 +77,7 @@
 
 <script setup>
 import { ref } from "vue";
+// import Reservation from "./Reservation.vue"
 
 const URL = process.env.VUE_APP_URL;
 const carList = ref([]);
