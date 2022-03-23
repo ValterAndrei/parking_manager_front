@@ -13,6 +13,16 @@ docker-compose up app
 docker-compose run --rm app sh
 ```
 
+### Install dependencies
+```
+yarn
+```
+
+### Linter
+```
+yarn lint --fix
+```
+
 
 ### Back-end
 See [Parking Manager](https://github.com/ValterAndrei/parking_manager/).

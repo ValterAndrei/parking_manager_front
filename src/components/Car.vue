@@ -6,11 +6,17 @@
         <th>Reservas</th>
       </tr>
     </thead>
-    <tbody v-for="car in props.list" :key="car.id">
+    <tbody
+      v-for="car in props.list"
+      :key="car.id"
+    >
       <tr>
         <td>{{ car.plate }}</td>
         <td>
-          <button class="button is-link is-light" @click="showCar(car.plate)">
+          <button
+            class="button is-link is-light"
+            @click="showCar(car.plate)"
+          >
             Ver reservas
           </button>
         </td>
@@ -20,9 +26,12 @@
 </template>
 
 <script setup>
-  import { defineProps, defineEmits } from "vue";
-
-  const props = defineProps(['list'])
+  const props = defineProps({
+    list: {
+      type: Array,
+      required: true,
+    },
+  })
 
   // https://stackoverflow.com/a/69834633/7346892
   const emit = defineEmits(['onShowCarInfo'])

@@ -4,18 +4,31 @@
       <div class="field">
         <label class="label">Placa</label>
         <div class="control">
-          <input class="input" type="text" placeholder="e.g BQT-9377" v-model="plate" />
+          <input
+            v-model="plate"
+            class="input"
+            type="text"
+            placeholder="e.g BQT-9377"
+          >
         </div>
       </div>
 
       <div class="field is-grouped">
         <div class="control">
-          <button class="button is-link" @click="checkin()">Submit</button>
+          <button
+            class="button is-link"
+            @click="checkin()"
+          >
+            Submit
+          </button>
         </div>
       </div>
 
       <div class="table-container">
-        <Car :list="carList" @onShowCarInfo="getCar" />
+        <Car
+          :list="carList"
+          @on-show-car-info="getCar"
+        />
       </div>
 
       <div class="table-container">
@@ -29,7 +42,10 @@
               <th>Controle</th>
             </tr>
           </thead>
-          <tbody v-for="(reservation, index) in carInfo.reservations" :key="index">
+          <tbody
+            v-for="(reservation, index) in carInfo.reservations"
+            :key="index"
+          >
             <tr>
               <td>{{ reservation.code }}</td>
               <td>{{ reservation.created_at }}</td>

@@ -1,5 +1,5 @@
 <template>
-  <Parking/>
+  <Parking />
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  {{props.list}}
+  {{ props.list }}
 </template>
 
 <script setup>

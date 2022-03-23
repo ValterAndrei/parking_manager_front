@@ -27,23 +27,12 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
+      "plugin:vue/vue3-recommended"
     ],
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {
-      "vue/multi-word-component-names": [
-        "error",
-        {
-          "ignores": [
-            "Parking",
-            "Reservation"
-          ]
-        }
-      ]
-    }
+    "rules": {}
   },
   "browserslist": [
     "> 1%",
