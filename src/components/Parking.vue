@@ -15,28 +15,11 @@
       </div>
 
       <div class="table-container">
-        <table class="table is-bordered is-striped is-hoverable">
-          <thead>
-            <tr>
-              <th>Placa</th>
-              <th>Reservas</th>
-            </tr>
-          </thead>
-          <tbody v-for="car in carList" :key="car.id">
-            <tr>
-              <td>{{ car.plate }}</td>
-              <td>
-                <button class="button is-link is-light" @click="getCar(car.plate)">
-                  Ver reservas
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <Car :list="carList" @onShowCarInfo="getCar" />
       </div>
 
       <div class="table-container">
-        <!-- <Reservation :list="carInfo.reservations"/> -->
+        <!-- <Reservation :list="carInfo.reservations" /> -->
 
         <table class="table">
           <thead>
@@ -77,6 +60,7 @@
 
 <script setup>
 import { ref } from "vue";
+import Car from "./Car.vue"
 // import Reservation from "./Reservation.vue"
 
 const URL = process.env.VUE_APP_URL;
