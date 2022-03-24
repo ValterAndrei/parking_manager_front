@@ -101,6 +101,8 @@ async function getCar(plate) {
 }
 
 async function checkin() {
+  // https://jasonwatmore.com/post/2020/04/30/vue-fetch-http-post-request-examples
+
   await fetch(`${URL}/parking/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
