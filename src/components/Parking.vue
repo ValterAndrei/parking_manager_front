@@ -5,6 +5,7 @@
         <label class="label">Placa</label>
         <div class="control">
           <input
+            ref="plate_input"
             v-model="plate"
             class="input"
             type="text"
@@ -83,6 +84,7 @@ const URL = process.env.VUE_APP_URL;
 const carList = ref([]);
 const carInfo = ref({});
 const plate = ref("");
+const plate_input = ref(null);
 
 async function getCarList() {
   const response = await fetch(`${URL}`);
@@ -104,6 +106,8 @@ async function checkin() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ vehicle: { plate: plate.value } }),
   });
+
+  plate_input.value.focus();
 
   getCarList();
 }
