@@ -114,16 +114,12 @@ async function checkin() {
   getCarList();
 }
 
-async function payment({ code, plate }) {
+async function payment({ code }) {
   await fetch(`${URL}/parking/${code}/pay`, { method: "PUT" });
-
-  getCar(plate);
 }
 
-async function checkout({ code, plate }) {
+async function checkout({ code }) {
   await fetch(`${URL}/parking/${code}/out`, { method: "PUT" });
-
-  getCar(plate);
 }
 
 getCarList();
