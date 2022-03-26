@@ -33,43 +33,11 @@
       </div>
 
       <div class="table-container">
-        <!-- <Reservation :list="carInfo.reservations" /> -->
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Entrada</th>
-              <th>Controle</th>
-            </tr>
-          </thead>
-          <tbody
-            v-for="(reservation, index) in carInfo.reservations"
-            :key="index"
-          >
-            <tr>
-              <td>{{ reservation.code }}</td>
-              <td>{{ reservation.created_at }}</td>
-              <td>
-                <button
-                  v-if="!reservation.paid"
-                  class="button is-link is-light"
-                  @click="payment(reservation)"
-                >
-                  Pagar
-                </button>
-                <button
-                  v-else-if="reservation.paid && !reservation.left"
-                  class="button is-link is-light"
-                  @click="checkout(reservation)"
-                >
-                  Checkout
-                </button>
-                <span v-else>Finalizado</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <Reservation
+          :list="reservationsList"
+          @make-payment="payment"
+          @make-checkout="checkout"
+        />
       </div>
     </div>
   </section>
@@ -78,11 +46,11 @@
 <script setup>
 import { ref } from "vue";
 import Car from "./Car.vue"
-// import Reservation from "./Reservation.vue"
+import Reservation from "./Reservation.vue"
 
 const URL = process.env.VUE_APP_URL;
 const carList = ref([]);
-const carInfo = ref({});
+const reservationsList = ref([]);
 const plate = ref("");
 const plate_input = ref(null);
 
@@ -97,7 +65,7 @@ async function getCar(plate) {
   const response = await fetch(`${URL}/parking/${plate}`);
   const data = await response.json();
 
-  carInfo.value = data;
+  reservationsList.value = data.reservations;
 }
 
 async function checkin() {
@@ -114,12 +82,16 @@ async function checkin() {
   getCarList();
 }
 
-async function payment({ code }) {
+async function payment({ code, plate }) {
   await fetch(`${URL}/parking/${code}/pay`, { method: "PUT" });
+
+  getCar(plate);
 }
 
-async function checkout({ code }) {
+async function checkout({ code, plate }) {
   await fetch(`${URL}/parking/${code}/out`, { method: "PUT" });
+
+  getCar(plate);
 }
 
 getCarList();

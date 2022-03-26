@@ -15,7 +15,7 @@
         <td>
           <button
             class="button is-link is-light"
-            @click="showCar(car.plate)"
+            @click="() => emit('onShowCarInfo', (car.plate))"
           >
             Ver reservas
           </button>
@@ -33,10 +33,5 @@
     },
   })
 
-  // https://stackoverflow.com/a/69834633/7346892
   const emit = defineEmits(['onShowCarInfo'])
-
-  function showCar(params) {
-    emit('onShowCarInfo', params)
-  }
 </script>
