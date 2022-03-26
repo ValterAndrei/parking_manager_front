@@ -79,16 +79,26 @@ async function getCar(plate) {
 }
 
 async function checkin() {
-  await fetch(`${URL}/parking/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ vehicle: { plate: plate.value } }),
-  });
+  try {
+    const response = await fetch(`${URL}/parking/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ vehicle: { plate: plate.value } }),
+    });
 
-  plate_input.value.focus();
-  plate.value = "";
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
 
-  getCarList();
+    // const json = await response.json();
+    plate_input.value.focus();
+    plate.value = "";
+
+    getCarList();
+  }
+  catch(error) {
+    console.error(`Could not create this reservation: ${error}`);
+  }
 }
 
 async function payment({ code, plate }) {
