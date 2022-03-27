@@ -140,7 +140,7 @@ async function payment({ code, plate }) {
 async function checkout({ code, plate }) {
   await fetch(`${URL}/parking/${code}/out`, { method: "PUT" });
 
-  toast({ message: 'Pagamento efetuado' })
+  toast({ message: 'Saída concluída' })
   getCar(plate);
 }
 
