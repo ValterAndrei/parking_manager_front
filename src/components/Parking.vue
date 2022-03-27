@@ -7,7 +7,7 @@
             <label class="label">Placa</label>
             <div class="control">
               <input
-                    ref="plate_input"
+                ref="plate_input"
                 v-model="plate"
                 v-maska="{
                   mask: 'LLL-NDNN',
