@@ -5,6 +5,7 @@
         <th>Código</th>
         <th>Entrada</th>
         <th>Saída</th>
+        <!-- <th>Tempo</th> -->
         <th>Controle</th>
       </tr>
     </thead>
@@ -14,8 +15,9 @@
     >
       <tr>
         <td>{{ reservation.code }}</td>
-        <td>{{ reservation.created_at }}</td>
-        <td>{{ reservation.checkout }}</td>
+        <td>{{ formatDate(reservation.created_at) }}</td>
+        <td>{{ formatDate(reservation.checkout) }}</td>
+        <!-- <td>{{ relativeTime(reservation) }}</td> -->
         <td>
           <button
             v-if="!reservation.paid"
@@ -50,4 +52,30 @@
     'makePayment',
     'makeCheckout',
   ])
+
+  function formatDate(date) {
+    return date
+      ? new Date(date).toLocaleString('pt-BR')
+      : '-'
+  }
+
+  // function relativeTime(reservation) {
+  //   const now = new Date()
+  //   const diff = now - new Date(reservation.created_at)
+  //   const seconds = Math.floor(diff / 1000)
+  //   const minutes = Math.floor(seconds / 60)
+  //   const hours = Math.floor(minutes / 60)
+  //   const days = Math.floor(hours / 24)
+
+  //   if (days > 0) {
+  //     return `${days} dia(s)`
+  //   } else if (hours > 0) {
+  //     return `${hours} hora(s)`
+  //   } else if (minutes > 0) {
+  //     return `${minutes} minuto(s)`
+  //   } else {
+  //     return `${seconds} segundo(s)`
+  //   }
+  // }
+
 </script>

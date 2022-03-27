@@ -9,7 +9,14 @@
               <input
                 ref="plate_input"
                 v-model="plate"
-                v-maska="{ mask: 'LLL-NDNN', tokens: { 'L': { pattern: /[a-zA-Z]/, uppercase: true }, 'N': { pattern: /[0-9]/ }, 'D': { pattern: /[a-zA-Z0-9]/, uppercase: true } }}"
+                v-maska="{
+                  mask: 'LLL-NDNN',
+                  tokens: {
+                    'L': { pattern: /[a-zA-Z]/, uppercase: true },
+                    'N': { pattern: /[0-9]/ },
+                    'D': { pattern: /[a-zA-Z0-9]/, uppercase: true }
+                  }
+                }"
                 class="input"
                 type="text"
                 placeholder="e.g BQT-9377"
