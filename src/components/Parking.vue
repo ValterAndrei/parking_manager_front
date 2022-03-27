@@ -54,6 +54,8 @@
 
 <script setup>
 import { ref } from "vue";
+import { toast } from "bulma-toast";
+
 import Car from "./Car.vue";
 import Reservation from "./Reservation.vue";
 
@@ -79,6 +81,17 @@ async function getCar(plate) {
 }
 
 async function checkin() {
+  if (plate.value === "" || plate.value.length !== 8) {
+    toast({
+      message: "Por favor, informe a placa do veículo",
+      type: "is-danger",
+      dismissible: true,
+      duration: 5000
+    });
+
+    return;
+  }
+
   try {
     const response = await fetch(`${URL}/parking/`, {
       method: "POST",
@@ -87,29 +100,47 @@ async function checkin() {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
+      toast({
+        message: `HTTP error ${response.status}`,
+        type: "is-danger",
+        dismissible: true,
+        duration: 5000
+      });
+    } else {
+      toast({
+        message: "Veículo registrado com sucesso",
+        type: "is-success",
+        dismissible: true,
+        duration: 5000
+      });
+
+      // const json = await response.json();
+      plate_input.value.value = "";
+      plate.value = "";
+      getCarList();
     }
-
-    // const json = await response.json();
-    plate_input.value.focus();
-    plate.value = "";
-
-    getCarList();
   }
   catch(error) {
-    console.error(`Could not create this reservation: ${error}`);
+    toast({
+      message: `Não foi possível registrar esta reserva: ${error}`,
+      type: "is-danger",
+      dismissible: true,
+      duration: 5000
+    });
   }
 }
 
 async function payment({ code, plate }) {
   await fetch(`${URL}/parking/${code}/pay`, { method: "PUT" });
 
+  toast({ message: 'Pagamento efetuado' })
   getCar(plate);
 }
 
 async function checkout({ code, plate }) {
   await fetch(`${URL}/parking/${code}/out`, { method: "PUT" });
 
+  toast({ message: 'Pagamento efetuado' })
   getCar(plate);
 }
 
