@@ -1,6 +1,6 @@
 # Parking Manager Front
 
-[![Run Lint Files](https://github.com/ValterAndrei/parking_manager_front/actions/workflows/.main.yml/badge.svg)](https://github.com/ValterAndrei/parking_manager_front/actions/workflows/.main.yml)
+[![Run Lint Files](https://github.com/ValterAndrei/parking_manager_front/actions/workflows/.main.yml/badge.svg?branch=main)](https://github.com/ValterAndrei/parking_manager_front/actions/workflows/.main.yml)
 
 ## Project setup
 ```
