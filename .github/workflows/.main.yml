@@ -15,4 +15,4 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
               yarn
-              yarn lint
+              yarn lint --no-fix
