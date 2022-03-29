@@ -100,6 +100,7 @@ async function deleteCar(plate) {
     duration: 5000
   });
 
+  reservationsList.value = [] // Limpa lista de reservas.
   getCarList();
 }
 

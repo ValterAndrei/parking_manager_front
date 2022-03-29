@@ -23,7 +23,7 @@
         </td>
         <td>
           <button
-            class="button is-link is-danger"
+            class="button is-danger is-light"
             @click="() => emit('onDeleteCar', (car.plate))"
           >
             Remover
