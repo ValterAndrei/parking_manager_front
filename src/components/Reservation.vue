@@ -1,5 +1,5 @@
 <template>  
-  <table class="table">
+  <table class="table is-bordered is-striped is-hoverable">
     <thead>
       <tr>
         <th>Código</th>

@@ -4,6 +4,7 @@
       <tr>
         <th>Placa</th>
         <th>Reservas</th>
+        <th>Controle</th>
       </tr>
     </thead>
     <tbody
@@ -20,6 +21,14 @@
             Ver reservas
           </button>
         </td>
+        <td>
+          <button
+            class="button is-link is-danger"
+            @click="() => emit('onDeleteCar', (car.plate))"
+          >
+            Remover
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -33,5 +42,5 @@
     },
   })
 
-  const emit = defineEmits(['onShowCarInfo'])
+  const emit = defineEmits(['onShowCarInfo', 'onDeleteCar'])
 </script>

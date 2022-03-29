@@ -42,6 +42,7 @@
             <Car
               :list="carList"
               @on-show-car-info="getCar"
+              @on-delete-car="deleteCar"
             />
           </div>
         </div>
@@ -85,6 +86,21 @@ async function getCar(plate) {
   const data     = await response.json();
 
   reservationsList.value = data.reservations;
+}
+
+async function deleteCar(plate) {
+  const response = await fetch(`${URL}/parking/${plate}`, {
+    method: "DELETE",
+  });
+
+  toast({
+    message: "Veículo removido com sucesso",
+    type: "is-success",
+    dismissible: true,
+    duration: 5000
+  });
+
+  getCarList();
 }
 
 async function checkin() {
