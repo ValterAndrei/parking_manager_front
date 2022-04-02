@@ -20,6 +20,7 @@
                 class="input"
                 type="text"
                 placeholder="e.g BQT-9377"
+                @keyup.enter="checkin()"
               >
             </div>
           </div>
@@ -89,19 +90,28 @@ async function getCar(plate) {
 }
 
 async function deleteCar(plate) {
-  const response = await fetch(`${URL}/parking/${plate}`, {
-    method: "DELETE",
-  });
+  if (confirm("Você realmente deseja remover este veículo?")) {
+    const response = await fetch(`${URL}/parking/${plate}`, {
+      method: "DELETE",
+    });
 
-  toast({
-    message: "Veículo removido com sucesso",
-    type: "is-success",
-    dismissible: true,
-    duration: 5000
-  });
+    toast({
+      message: "Veículo removido com sucesso",
+      type: "is-success",
+      dismissible: true,
+      duration: 5000
+    });
 
-  reservationsList.value = [] // Limpa lista de reservas.
-  getCarList();
+    reservationsList.value = [] // Limpa lista de reservas.
+    getCarList();
+  } else {
+    toast({
+      message: "Operação cancelada",
+      type: "is-danger",
+      dismissible: true,
+      duration: 5000
+    });
+  }
 }
 
 async function checkin() {
