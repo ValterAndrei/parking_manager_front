@@ -11,13 +11,6 @@
       v-for="car in props.list"
       :key="car.id"
     >
-      <ModalConfirmation
-        :show-modal-flag="showModalFlag"
-        :plate="car.plate"
-        @on-ok-modal="okModal"
-        @on-cancel-modal="cancelModal"
-      />
-
       <tr>
         <td>{{ car.plate }}</td>
         <td>
@@ -37,6 +30,13 @@
           </button>
         </td>
       </tr>
+
+      <ModalConfirmation
+        :show-modal-flag="showModalFlag"
+        :plate="currentPlate"
+        @on-ok-modal="okModal"
+        @on-cancel-modal="cancelModal"
+      />
     </tbody>
   </table>
 </template>
@@ -57,6 +57,7 @@
 
   const showModalFlag = ref(false);
   const okPressed     = ref(false);
+  const currentPlate  = ref("");
 
   async function deleteCar(plate) {
     const response = await fetch(`${URL}/parking/${plate}`, {
@@ -76,6 +77,8 @@
   function showModal(plate) {
     okPressed.value = false;
     showModalFlag.value = true;
+
+    currentPlate.value = plate;
   }
 
   function okModal(plate) {
