@@ -42,8 +42,8 @@
           <div class="table-container">
             <Car
               :list="carList"
+              @on-get-car-list="getCarList"
               @on-show-car-info="getCar"
-              @on-delete-car="deleteCar"
             />
           </div>
         </div>
@@ -79,6 +79,7 @@ async function getCarList() {
   const response = await fetch(`${URL}`);
   const data     = await response.json();
 
+  reservationsList.value = [] // Limpa lista de reservas.
   carList.value = data;
 }
 
@@ -87,31 +88,6 @@ async function getCar(plate) {
   const data     = await response.json();
 
   reservationsList.value = data.reservations;
-}
-
-async function deleteCar(plate) {
-  if (confirm("Você realmente deseja remover este veículo?")) {
-    const response = await fetch(`${URL}/parking/${plate}`, {
-      method: "DELETE",
-    });
-
-    toast({
-      message: "Veículo removido com sucesso",
-      type: "is-success",
-      dismissible: true,
-      duration: 5000
-    });
-
-    reservationsList.value = [] // Limpa lista de reservas.
-    getCarList();
-  } else {
-    toast({
-      message: "Operação cancelada",
-      type: "is-danger",
-      dismissible: true,
-      duration: 5000
-    });
-  }
 }
 
 async function checkin() {

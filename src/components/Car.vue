@@ -11,6 +11,13 @@
       v-for="car in props.list"
       :key="car.id"
     >
+      <ModalConfirmation
+        :show-modal-flag="showModalFlag"
+        :plate="car.plate"
+        @on-ok-modal="okModal"
+        @on-cancel-modal="cancelModal"
+      />
+
       <tr>
         <td>{{ car.plate }}</td>
         <td>
@@ -24,7 +31,7 @@
         <td>
           <button
             class="button is-danger is-light"
-            @click="() => emit('onDeleteCar', (car.plate))"
+            @click="showModal(car.plate)"
           >
             Remover
           </button>
@@ -35,6 +42,12 @@
 </template>
 
 <script setup>
+  import { ref } from "vue";
+  import { toast } from "bulma-toast";
+  import ModalConfirmation from "./ModalConfirmation.vue";
+
+  const URL = process.env.VUE_APP_URL;
+
   const props = defineProps({
     list: {
       type: Array,
@@ -42,5 +55,47 @@
     },
   })
 
-  const emit = defineEmits(['onShowCarInfo', 'onDeleteCar'])
+  const showModalFlag = ref(false);
+  const okPressed     = ref(false);
+
+  async function deleteCar(plate) {
+    const response = await fetch(`${URL}/parking/${plate}`, {
+      method: "DELETE",
+    });
+
+    toast({
+      message: "Veículo removido com sucesso",
+      type: "is-success",
+      dismissible: true,
+      duration: 5000
+    });
+
+    emit("onGetCarList");
+  }
+
+  function showModal(plate) {
+    okPressed.value = false;
+    showModalFlag.value = true;
+  }
+
+  function okModal(plate) {
+    okPressed.value = true;
+    showModalFlag.value = false;
+
+    deleteCar(plate);
+  }
+
+  function cancelModal() {
+    okPressed.value = false;
+    showModalFlag.value = false;
+
+    toast({
+      message: "Operação cancelada",
+      type: "is-danger",
+      dismissible: true,
+      duration: 5000
+    });
+  }
+
+  const emit = defineEmits(['onShowCarInfo', 'onGetCarList'])
 </script>
