@@ -30,15 +30,15 @@
           </button>
         </td>
       </tr>
-
-      <ModalConfirmation
-        :show-modal-flag="showModalFlag"
-        :plate="currentPlate"
-        @on-ok-modal="okModal"
-        @on-cancel-modal="cancelModal"
-      />
     </tbody>
   </table>
+
+  <ModalConfirmation
+    :show-modal-flag="showModalFlag"
+    :plate="currentPlate"
+    @on-ok-modal="okModal"
+    @on-cancel-modal="cancelModal"
+  />
 </template>
 
 <script setup>
