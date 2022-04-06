@@ -21,14 +21,14 @@
         <td>
           <button
             v-if="!reservation.paid"
-            class="button is-link is-light"
+            class="button is-success is-light"
             @click="() => emit('makePayment', (reservation))"
           >
             Pagar
           </button>
           <button
             v-else-if="reservation.paid && !reservation.left"
-            class="button is-link is-light"
+            class="button is-primary is-light"
             @click="() => emit('makeCheckout', (reservation))"
           >
             Checkout
