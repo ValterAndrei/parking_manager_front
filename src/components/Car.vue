@@ -91,13 +91,6 @@
   function cancelModal() {
     okPressed.value = false;
     showModalFlag.value = false;
-
-    toast({
-      message: "Operação cancelada",
-      type: "is-danger",
-      dismissible: true,
-      duration: 5000
-    });
   }
 
   const emit = defineEmits(['onShowCarInfo', 'onGetCarList'])

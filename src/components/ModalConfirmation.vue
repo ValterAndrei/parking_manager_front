@@ -3,7 +3,11 @@
     class="modal"
     :class="{'is-active': showModalFlag}"
   >
-    <div class="modal-background" />
+    <!-- XXX: Fechando modal quando clica fora dele -->
+    <div
+      class="modal-background"
+      @click="$emit('onCancelModal')"
+    />
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">
