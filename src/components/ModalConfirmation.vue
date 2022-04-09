@@ -41,6 +41,8 @@
 </template>
 
 <script setup>
+  import { onMounted } from "vue";
+
   const props = defineProps({
     showModalFlag: {
       type: Boolean,
@@ -50,6 +52,15 @@
       type: String,
       required: true,
     },
+  })
+
+  onMounted(() => {
+    document.addEventListener("keydown", (e) => {
+      // If  ESC key was pressed...
+      if (e.key === 'Escape') {
+        emit('onCancelModal')
+      }
+    });
   })
 
   const emit = defineEmits(['onOkModal', 'onCancelModal'])
