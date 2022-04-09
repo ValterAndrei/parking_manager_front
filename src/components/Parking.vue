@@ -62,7 +62,7 @@
 </template>
 
 <script setup>
-  import { ref } from "vue";
+  import { ref, onMounted } from "vue";
   import { toast } from "bulma-toast";
 
   import Car from "./Car.vue";
@@ -109,9 +109,11 @@
         body: JSON.stringify({ vehicle: { plate: plate.value } }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
         toast({
-          message: `HTTP error ${response.status}`,
+          message: `HTTP error ${response.status}: ${data[0]}`,
           type: "is-danger",
           dismissible: true,
           duration: 5000
@@ -124,7 +126,8 @@
           duration: 5000
         });
 
-        // const json = await response.json();
+        // console.log(data);
+
         plate_input.value.value = "";
         plate.value = "";
         getCarList();
@@ -154,5 +157,7 @@
     getCar(plate);
   }
 
-  getCarList();
+  onMounted(() => {
+    getCarList();
+  })
 </script>
