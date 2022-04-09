@@ -28,6 +28,7 @@
             <div class="control">
               <button
                 class="button is-link"
+                :class="{'is-loading': isLoading}"
                 @click="checkin()"
               >
                 Registrar entrada
@@ -74,6 +75,7 @@
   const reservationsList = ref([]);
   const plate            = ref("");
   const plate_input      = ref(null);
+  const isLoading        = ref(false);
 
   async function getCarList() {
     const response = await fetch(`${URL}`);
@@ -102,6 +104,8 @@
       return;
     }
 
+    isLoading.value = true;
+
     try {
       const response = await fetch(`${URL}/parking/`, {
         method: "POST",
@@ -128,7 +132,7 @@
 
         // console.log(data);
 
-        plate_input.value.value = "";
+        plate_input.value.focus();
         plate.value = "";
         getCarList();
       }
@@ -141,6 +145,8 @@
         duration: 5000
       });
     }
+
+    isLoading.value = false;
   }
 
   async function payment({ code, plate }) {
