@@ -56,7 +56,6 @@
   })
 
   const showModalFlag = ref(false);
-  const okPressed     = ref(false);
   const currentPlate  = ref("");
 
   async function deleteCar(plate) {
@@ -75,21 +74,18 @@
   }
 
   function showModal(plate) {
-    okPressed.value = false;
     showModalFlag.value = true;
 
     currentPlate.value = plate;
   }
 
   function okModal(plate) {
-    okPressed.value = true;
     showModalFlag.value = false;
 
     deleteCar(plate);
   }
 
   function cancelModal() {
-    okPressed.value = false;
     showModalFlag.value = false;
   }
 
