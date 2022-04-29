@@ -4,7 +4,7 @@
       <div class="columns is-desktop">
         <div class="column is-one-fifth">
           <div class="field">
-            <label class="label">Placa</label>
+            <label class="label">Placa do veículo</label>
             <div class="control">
               <input
                 ref="plate_input"
