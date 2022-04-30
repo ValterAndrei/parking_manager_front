@@ -34,3 +34,11 @@ See [Parking Manager](https://github.com/ValterAndrei/parking_manager/).
 
 ### Production
 [On heroku](https://parking-manager-front.herokuapp.com/)
+
+
+### Deploy
+```
+git remote add heroku https://git.heroku.com/parking-manager-front.git
+
+git push heroku main
+```
