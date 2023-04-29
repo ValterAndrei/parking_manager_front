@@ -21,38 +21,15 @@ const URL = process.env.VUE_APP_URL;
 export default {
   data() {
     return {
-      file: null,
-      progress: 0,
-      directUploadUrl: null,
+      file:                null,
+      progress:            0,
+      directUploadUrl:     null,
       directUploadHeaders: {},
-      signedId: null
+      signedId:            null
     };
   },
 
   methods: {
-    async getDirectUploadUrl() {
-      const checksum = await this.getBlobChecksum();
-      const response = await fetch(`${URL}/rails/active_storage/direct_uploads`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          filename: this.file.name,
-          content_type: this.file.type,
-          byte_size: this.file.size,
-          checksum: checksum
-        })
-      });
-
-      const data = await response.json();
-      this.directUploadUrl     = data.direct_upload_url;
-      this.directUploadHeaders = data.headers;
-      this.signedId            = data.signed_id;
-    },
-
-    setFile(event) {
-      this.file = event.target.files[0];
-    },
-
     async uploadFile() {
       await this.getDirectUploadUrl();
 
@@ -71,29 +48,57 @@ export default {
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
           if (xhr.status === 204) {
-            console.log('Upload concluído. Sign ID: ', this.signedId);
+            console.log('Upload completed. Sign ID: ', this.signedId);
           } else {
-            console.error('Erro ao fazer upload');
+            console.error('Error loading');
           }
         }
       };
+
       xhr.send(this.file);
+    },
+
+    async getDirectUploadUrl() {
+      const checksum = await this.getBlobChecksum();
+      const response = await fetch(`${URL}/rails/active_storage/direct_uploads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filename:     this.file.name,
+          content_type: this.file.type,
+          byte_size:    this.file.size,
+          checksum:     checksum
+        })
+      });
+
+      const data               = await response.json();
+      this.directUploadUrl     = data.direct_upload_url;
+      this.directUploadHeaders = data.headers;
+      this.signedId            = data.signed_id;
+    },
+
+    setFile(event) {
+      this.file = event.target.files[0];
     },
 
     getBlobChecksum() {
       return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
+
         fileReader.onload = (event) => {
           const wordArray = CryptoJS.lib.WordArray.create(event.target.result);
-          const checksum = CryptoJS.MD5(wordArray).toString(CryptoJS.enc.Base64);
+          const checksum  = CryptoJS.MD5(wordArray).toString(CryptoJS.enc.Base64);
+
           resolve(checksum);
         };
+
         fileReader.onerror = (event) => {
           reject(event.target.error);
         };
+
         fileReader.readAsArrayBuffer(this.file);
       });
-    },
+    }
   }
 };
 </script>
