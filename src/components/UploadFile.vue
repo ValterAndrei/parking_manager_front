@@ -1,13 +1,27 @@
 <template>
   <div>
     <form @submit.prevent="uploadFile">
-      <input type="file" ref="fileInput" @change="setFile">
-      <button type="submit">Upload</button>
+      <input
+        ref="fileInput"
+        type="file"
+        @change="setFile"
+      >
+      <button type="submit">
+        Upload
+      </button>
     </form>
 
-    <div class="progress-container" v-if="progress > 0">
-      <div class="progress-bar" :style="{ width: `${progress}%` }"></div>
-      <div class="progress-label">{{ progress }}%</div>
+    <div
+      v-if="progress > 0"
+      class="progress-container"
+    >
+      <div
+        class="progress-bar"
+        :style="{ width: `${progress}%` }"
+      />
+      <div class="progress-label">
+        {{ progress }}%
+      </div>
     </div>
   </div>
 </template>
