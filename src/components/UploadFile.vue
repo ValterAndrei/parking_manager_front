@@ -19,6 +19,8 @@ import CryptoJS from 'crypto-js'; // yarn add crypto-js
 const URL = process.env.VUE_APP_URL;
 
 export default {
+  emits: ['on-signed-id'],
+
   data() {
     return {
       file:                null,
@@ -64,10 +66,12 @@ export default {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          filename:     this.file.name,
-          content_type: this.file.type,
-          byte_size:    this.file.size,
-          checksum:     checksum
+          blob: {
+            filename:     this.file.name,
+            content_type: this.file.type,
+            byte_size:    this.file.size,
+            checksum:     checksum
+          }
         })
       });
 
@@ -75,12 +79,15 @@ export default {
       this.directUploadUrl     = data.direct_upload_url;
       this.directUploadHeaders = data.headers;
       this.signedId            = data.signed_id;
+
+      // Envia o signedId para o componente pai.
+      this.$emit('on-signed-id', this.signedId);
     },
 
     setFile(event) {
       this.file = event.target.files[0];
 
-      // Para enviar o arquivo logo após selecioná-lo, descomente a linha abaixo:
+      // Para enviar o arquivo logo após selecioná-lo:
       // this.uploadFile();
     },
 
