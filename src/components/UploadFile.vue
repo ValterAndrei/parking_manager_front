@@ -9,11 +9,13 @@
       <div class="progress-bar" :style="{ width: `${progress}%` }"></div>
       <div class="progress-label">{{ progress }}%</div>
     </div>
-
   </div>
 </template>
 
 <script>
+
+import CryptoJS from 'crypto-js'; // yarn add crypto-js
+
 const URL = process.env.VUE_APP_URL;
 
 export default {
@@ -25,8 +27,10 @@ export default {
       directUploadHeaders: {}
     };
   },
+
   methods: {
     async getDirectUploadUrl() {
+      const checksum = await this.getBlobChecksum();
       const response = await fetch(`${URL}/rails/active_storage/direct_uploads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -34,16 +38,19 @@ export default {
           filename: this.file.name,
           content_type: this.file.type,
           byte_size: this.file.size,
-          checksum: "rrz0clNvIgdstM/NveTsoQ=="
+          checksum: checksum
         })
       });
+
       const data = await response.json();
       this.directUploadUrl = data.direct_upload_url;
       this.directUploadHeaders = data.headers;
     },
+
     setFile(event) {
       this.file = event.target.files[0];
     },
+
     async uploadFile() {
       await this.getDirectUploadUrl();
       const xhr = new XMLHttpRequest();
@@ -65,7 +72,22 @@ export default {
         }
       };
       xhr.send(this.file);
-    }
+    },
+
+    getBlobChecksum() {
+      return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.onload = (event) => {
+          const wordArray = CryptoJS.lib.WordArray.create(event.target.result);
+          const checksum = CryptoJS.MD5(wordArray).toString(CryptoJS.enc.Base64);
+          resolve(checksum);
+        };
+        fileReader.onerror = (event) => {
+          reject(event.target.error);
+        };
+        fileReader.readAsArrayBuffer(this.file);
+      });
+    },
   }
 };
 </script>
