@@ -24,7 +24,8 @@ export default {
       file: null,
       progress: 0,
       directUploadUrl: null,
-      directUploadHeaders: {}
+      directUploadHeaders: {},
+      signedId: null
     };
   },
 
@@ -43,8 +44,9 @@ export default {
       });
 
       const data = await response.json();
-      this.directUploadUrl = data.direct_upload_url;
+      this.directUploadUrl     = data.direct_upload_url;
       this.directUploadHeaders = data.headers;
+      this.signedId            = data.signed_id;
     },
 
     setFile(event) {
@@ -53,19 +55,23 @@ export default {
 
     async uploadFile() {
       await this.getDirectUploadUrl();
+
       const xhr = new XMLHttpRequest();
       xhr.open('PUT', this.directUploadUrl, true);
       xhr.setRequestHeader('Content-Type', this.file.type);
+
       Object.entries(this.directUploadHeaders).forEach(([key, value]) => {
         xhr.setRequestHeader(key, value);
       });
+
       xhr.upload.onprogress = (event) => {
         this.progress = Math.round((event.loaded / event.total) * 100);
       };
+
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
           if (xhr.status === 204) {
-            console.log('Upload concluído');
+            console.log('Upload concluído. Sign ID: ', this.signedId);
           } else {
             console.error('Erro ao fazer upload');
           }
