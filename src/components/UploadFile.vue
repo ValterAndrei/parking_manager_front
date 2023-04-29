@@ -79,6 +79,9 @@ export default {
 
     setFile(event) {
       this.file = event.target.files[0];
+
+      // Para enviar o arquivo logo após selecioná-lo, descomente a linha abaixo:
+      // this.uploadFile();
     },
 
     getBlobChecksum() {
