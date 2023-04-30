@@ -35,7 +35,7 @@
       <div class="field">
         <div class="control">
           <button
-            class="button is-link is-fullwidth"
+            class="button is-info is-light is-small"
             type="submit"
           >
             Upload
