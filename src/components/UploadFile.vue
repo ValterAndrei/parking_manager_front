@@ -44,6 +44,7 @@
   const directUploadHeaders = ref({});
   const signedId            = ref(null);
 
+  // Envia o arquivo para o servidor
   async function uploadFile() {
     await getDirectUploadUrl();
 
@@ -65,6 +66,7 @@
     });
   }
 
+  // Obtém a URL para upload do arquivo
   async function getDirectUploadUrl() {
     const checksum = await getBlobChecksum();
     const response = await fetch(`${URL}/rails/active_storage/direct_uploads`, {
