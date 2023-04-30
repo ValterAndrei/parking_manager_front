@@ -4,10 +4,14 @@
       <input
         ref="fileInput"
         type="file"
+        class="input"
         @change="setFile"
       >
-      <button type="submit">
-        Upload
+      <button
+        class="button is-link"
+        type="submit"
+        >
+          Upload
       </button>
     </form>
 
@@ -90,7 +94,6 @@
     directUploadHeaders.value = data.headers;
     signedId.value            = data.signed_id;
 
-    // Envia o signedId para o componente pai.
     emit('onSignedId', signedId.value);
   }
 

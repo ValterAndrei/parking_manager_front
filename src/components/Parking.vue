@@ -25,9 +25,14 @@
             </div>
           </div>
 
-          <UploadFile
-            @on-signed-id="setSignedId"
-          />
+          <div class="field">
+            <label class="label">Foto do veículo</label>
+            <div class="control">
+              <UploadFile
+                @on-signed-id="setSignedId"
+              />
+            </div>
+          </div>
 
           <div class="field">
             <div class="control">
@@ -143,8 +148,6 @@
           dismissible: true,
           duration: 5000
         });
-
-        // console.log(data);
 
         plate_input.value.focus();
         plate.value = "";
