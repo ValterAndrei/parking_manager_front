@@ -2,7 +2,7 @@
   <section class="section">
     <div class="container">
       <div class="columns is-desktop">
-        <div class="column is-one-fifth">
+        <div class="column is-half">
           <div class="field">
             <label class="label">Placa do veículo</label>
             <div class="control">
@@ -24,6 +24,15 @@
               >
             </div>
           </div>
+
+          <div class="field">
+            <div class="control">
+              <UploadFile
+                @on-signed-id="setSignedId"
+              />
+            </div>
+          </div>
+
           <div class="field">
             <div class="control">
               <button
@@ -63,11 +72,12 @@
 </template>
 
 <script setup>
-  import { ref, onMounted } from "vue";
-  import { toast } from "bulma-toast";
+  import { ref, onMounted } from 'vue';
+  import { toast } from 'bulma-toast';
 
-  import Car from "./Car.vue";
-  import Reservation from "./Reservation.vue";
+  import Car from './Car.vue';
+  import Reservation from './Reservation.vue';
+  import UploadFile from './UploadFile.vue';
 
   const URL = process.env.VUE_APP_URL;
 
@@ -76,6 +86,7 @@
   const plate            = ref("");
   const plate_input      = ref(null);
   const isLoading        = ref(false);
+  const signedId         = ref(null);
 
   async function getCarList() {
     const response = await fetch(`${URL}`);
@@ -110,7 +121,14 @@
       const response = await fetch(`${URL}/parking/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ vehicle: { plate: plate.value } }),
+        body: JSON.stringify(
+          {
+            vehicle: {
+              plate: plate.value,
+              photo: signedId.value
+            }
+          }
+        ),
       });
 
       const data = await response.json();
@@ -129,8 +147,6 @@
           dismissible: true,
           duration: 5000
         });
-
-        // console.log(data);
 
         plate_input.value.focus();
         plate.value = "";
@@ -161,6 +177,10 @@
 
     toast({ message: 'Saída concluída' })
     getCar(plate);
+  }
+
+  function setSignedId(signedIdParam) {
+    signedId.value = signedIdParam;
   }
 
   onMounted(() => {
