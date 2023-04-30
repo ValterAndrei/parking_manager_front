@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-  import { ref, defineEmits } from 'vue';
+  import { ref } from 'vue';
   import CryptoJS from 'crypto-js'; // yarn add crypto-js
 
   const URL = process.env.VUE_APP_URL;
@@ -48,19 +48,23 @@
   async function uploadFile() {
     await getDirectUploadUrl();
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("PUT", directUploadUrl.value, true);
-    xhr.setRequestHeader("Content-Type", file.value.type);
-    for (const [key, value] of Object.entries(directUploadHeaders)) {
-      xhr.setRequestHeader(key, value);
-    }
+    const requestOptions = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': file.value.type,
+        ...directUploadHeaders
+      }
+    };
 
-    // Monitora o progresso do upload
+    // Cria um novo objeto XMLHttpRequest
+    const xhr = new XMLHttpRequest();
+
+    // Define a função a ser chamada quando houver uma atualização de progresso
     xhr.upload.onprogress = (event) => {
       progress.value = Math.round((event.loaded / event.total) * 100);
     };
 
-    // Executa após o upload ser concluído
+    // Define a função a ser chamada após o upload ser concluído
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
         if (xhr.status === 204) {
@@ -71,7 +75,11 @@
       }
     };
 
-    // Envia o arquivo para o servidor
+    // Abre uma conexão com o servidor e envia a requisição
+    xhr.open('PUT', directUploadUrl.value, true);
+    for (const [key, value] of Object.entries(requestOptions.headers)) {
+      xhr.setRequestHeader(key, value);
+    }
     xhr.send(file.value);
   }
 
