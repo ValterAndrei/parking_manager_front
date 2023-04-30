@@ -10,8 +10,8 @@
       <button
         class="button is-link"
         type="submit"
-        >
-          Upload
+      >
+        Upload
       </button>
     </form>
 
