@@ -31,14 +31,12 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
+  import { ref, defineEmits } from 'vue';
   import CryptoJS from 'crypto-js'; // yarn add crypto-js
 
   const URL = process.env.VUE_APP_URL;
 
-  const emit = defineEmits([
-    'onSignedId'
-  ])
+  const emit = defineEmits(['onSignedId']);
 
   const file                = ref(null);
   const progress            = ref(0);
@@ -49,29 +47,22 @@
   async function uploadFile() {
     await getDirectUploadUrl();
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('PUT', directUploadUrl.value, true);
-    xhr.setRequestHeader('Content-Type', file.value.type);
-
-    Object.entries(directUploadHeaders).forEach(([key, value]) => {
-      xhr.setRequestHeader(key, value);
-    });
-
-    xhr.upload.onprogress = (event) => {
-      progress.value = Math.round((event.loaded / event.total) * 100);
-    };
-
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 204) {
-          console.log('Upload completed. Sign ID: ', signedId.value);
-        } else {
-          console.error('Error loading');
-        }
+    fetch(directUploadUrl.value, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': file.value.type,
+        ...directUploadHeaders.value
+      },
+      body: file.value
+    }).then(response => {
+      if (response.ok) {
+        console.log('Upload completed. Sign ID: ', signedId.value);
+      } else {
+        console.error('Error loading');
       }
-    };
-
-    xhr.send(file.value);
+    }).catch(error => {
+      console.error('Error loading', error);
+    });
   }
 
   async function getDirectUploadUrl() {
