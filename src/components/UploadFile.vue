@@ -26,105 +26,99 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { ref } from 'vue';
+  import CryptoJS from 'crypto-js'; // yarn add crypto-js
 
-import CryptoJS from 'crypto-js'; // yarn add crypto-js
+  const URL = process.env.VUE_APP_URL;
 
-const URL = process.env.VUE_APP_URL;
+  const emit = defineEmits([
+    'onSignedId'
+  ])
 
-export default {
-  emits: ['on-signed-id'],
+  const file                = ref(null);
+  const progress            = ref(0);
+  const directUploadUrl     = ref(null);
+  const directUploadHeaders = ref({});
+  const signedId            = ref(null);
 
-  data() {
-    return {
-      file:                null,
-      progress:            0,
-      directUploadUrl:     null,
-      directUploadHeaders: {},
-      signedId:            null
+  async function uploadFile() {
+    await getDirectUploadUrl();
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', directUploadUrl.value, true);
+    xhr.setRequestHeader('Content-Type', file.value.type);
+
+    Object.entries(directUploadHeaders).forEach(([key, value]) => {
+      xhr.setRequestHeader(key, value);
+    });
+
+    xhr.upload.onprogress = (event) => {
+      progress.value = Math.round((event.loaded / event.total) * 100);
     };
-  },
 
-  methods: {
-    async uploadFile() {
-      await this.getDirectUploadUrl();
-
-      const xhr = new XMLHttpRequest();
-      xhr.open('PUT', this.directUploadUrl, true);
-      xhr.setRequestHeader('Content-Type', this.file.type);
-
-      Object.entries(this.directUploadHeaders).forEach(([key, value]) => {
-        xhr.setRequestHeader(key, value);
-      });
-
-      xhr.upload.onprogress = (event) => {
-        this.progress = Math.round((event.loaded / event.total) * 100);
-      };
-
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          if (xhr.status === 204) {
-            console.log('Upload completed. Sign ID: ', this.signedId);
-          } else {
-            console.error('Error loading');
-          }
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 204) {
+          console.log('Upload completed. Sign ID: ', signedId.value);
+        } else {
+          console.error('Error loading');
         }
+      }
+    };
+
+    xhr.send(file.value);
+  }
+
+  async function getDirectUploadUrl() {
+    const checksum = await getBlobChecksum();
+    const response = await fetch(`${URL}/rails/active_storage/direct_uploads`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        blob: {
+          filename:     file.value.name,
+          content_type: file.value.type,
+          byte_size:    file.value.size,
+          checksum:     checksum
+        }
+      })
+    });
+
+    const data                = await response.json();
+    directUploadUrl.value     = data.direct_upload_url;
+    directUploadHeaders.value = data.headers;
+    signedId.value            = data.signed_id;
+
+    // Envia o signedId para o componente pai.
+    emit('onSignedId', signedId.value);
+  }
+
+  function setFile(event) {
+    file.value = event.target.files[0];
+
+    // Para enviar o arquivo logo após selecioná-lo:
+    // this.uploadFile();
+  }
+
+  function getBlobChecksum() {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+
+      fileReader.onload = (event) => {
+        const wordArray = CryptoJS.lib.WordArray.create(event.target.result);
+        const checksum  = CryptoJS.MD5(wordArray).toString(CryptoJS.enc.Base64);
+
+        resolve(checksum);
       };
 
-      xhr.send(this.file);
-    },
+      fileReader.onerror = (event) => {
+        reject(event.target.error);
+      };
 
-    async getDirectUploadUrl() {
-      const checksum = await this.getBlobChecksum();
-      const response = await fetch(`${URL}/rails/active_storage/direct_uploads`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          blob: {
-            filename:     this.file.name,
-            content_type: this.file.type,
-            byte_size:    this.file.size,
-            checksum:     checksum
-          }
-        })
-      });
-
-      const data               = await response.json();
-      this.directUploadUrl     = data.direct_upload_url;
-      this.directUploadHeaders = data.headers;
-      this.signedId            = data.signed_id;
-
-      // Envia o signedId para o componente pai.
-      this.$emit('on-signed-id', this.signedId);
-    },
-
-    setFile(event) {
-      this.file = event.target.files[0];
-
-      // Para enviar o arquivo logo após selecioná-lo:
-      // this.uploadFile();
-    },
-
-    getBlobChecksum() {
-      return new Promise((resolve, reject) => {
-        const fileReader = new FileReader();
-
-        fileReader.onload = (event) => {
-          const wordArray = CryptoJS.lib.WordArray.create(event.target.result);
-          const checksum  = CryptoJS.MD5(wordArray).toString(CryptoJS.enc.Base64);
-
-          resolve(checksum);
-        };
-
-        fileReader.onerror = (event) => {
-          reject(event.target.error);
-        };
-
-        fileReader.readAsArrayBuffer(this.file);
-      });
-    }
+      fileReader.readAsArrayBuffer(file.value);
+    });
   }
-};
 </script>
 
 <style>
