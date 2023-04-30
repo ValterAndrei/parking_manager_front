@@ -26,7 +26,6 @@
           </div>
 
           <div class="field">
-            <label class="label">Foto do veículo</label>
             <div class="control">
               <UploadFile
                 @on-signed-id="setSignedId"

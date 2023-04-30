@@ -1,32 +1,33 @@
 <template>
-  <div>
-    <form @submit.prevent="uploadFile">
-      <input
-        ref="fileInput"
-        type="file"
-        class="input"
-        @change="setFile"
-      >
-      <button
-        class="button is-link"
-        type="submit"
-      >
-        Upload
-      </button>
-    </form>
+  <div class="container">
+    <form @submit.prevent="uploadFile" class="box">
+      <div class="field">
+        <label for="file" class="label">Foto do veículo</label>
+        <div class="control">
+          <input
+            ref="fileInput"
+            id="file"
+            type="file"
+            class="input"
+            @change="setFile"
+          >
+        </div>
 
-    <div
-      v-if="progress > 0"
-      class="progress-container"
-    >
-      <div
-        class="progress-bar"
-        :style="{ width: `${progress}%` }"
-      />
-      <div class="progress-label">
-        {{ progress }}%
+        <div
+          v-if="progress > 0"
+          class="progress-container progress is-primary"
+        >
+          <progress class="progress-bar" :value="progress" max="100">{{ progress }}%</progress>
+        </div>
       </div>
-    </div>
+      <div class="field">
+        <div class="control">
+          <button class="button is-link is-fullwidth" type="submit">
+            Upload
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -111,7 +112,7 @@
     file.value = event.target.files[0];
 
     // Para enviar o arquivo logo após selecioná-lo:
-    // this.uploadFile();
+    uploadFile();
   }
 
   function getBlobChecksum() {
@@ -133,30 +134,3 @@
     });
   }
 </script>
-
-<style>
-.upload-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.progress-container {
-  width: 100%;
-  height: 20px;
-  border: 1px solid #ccc;
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-}
-
-.progress-bar {
-  height: 100%;
-  background-color: #2196f3;
-}
-
-.progress-label {
-  margin-left: 10px;
-}
-</style>
