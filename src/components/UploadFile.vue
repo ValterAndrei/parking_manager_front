@@ -48,22 +48,31 @@
   async function uploadFile() {
     await getDirectUploadUrl();
 
-    fetch(directUploadUrl.value, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': file.value.type,
-        ...directUploadHeaders.value
-      },
-      body: file.value
-    }).then(response => {
-      if (response.ok) {
-        console.log('Upload completed. Sign ID: ', signedId.value);
-      } else {
-        console.error('Error loading');
+    const xhr = new XMLHttpRequest();
+    xhr.open("PUT", directUploadUrl.value, true);
+    xhr.setRequestHeader("Content-Type", file.value.type);
+    for (const [key, value] of Object.entries(directUploadHeaders)) {
+      xhr.setRequestHeader(key, value);
+    }
+
+    // Monitora o progresso do upload
+    xhr.upload.onprogress = (event) => {
+      progress.value = Math.round((event.loaded / event.total) * 100);
+    };
+
+    // Executa após o upload ser concluído
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 204) {
+          console.log("Upload completed. Sign ID: ", signedId.value);
+        } else {
+          console.error("Error loading");
+        }
       }
-    }).catch(error => {
-      console.error('Error loading', error);
-    });
+    };
+
+    // Envia o arquivo para o servidor
+    xhr.send(file.value);
   }
 
   // Obtém a URL para upload do arquivo
