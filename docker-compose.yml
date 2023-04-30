@@ -8,3 +8,5 @@ services:
     volumes:
       - ./:/app
     command: 'yarn serve'
+    environment: 
+      - CHOKIDAR_USEPOLLING=true # <-- this enables the hot reloading
