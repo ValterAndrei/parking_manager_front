@@ -1,12 +1,18 @@
 <template>
   <div class="container">
-    <form @submit.prevent="uploadFile" class="box">
+    <form
+      class="box"
+      @submit.prevent="uploadFile"
+    >
       <div class="field">
-        <label for="file" class="label">Foto do veículo</label>
+        <label
+          for="file"
+          class="label"
+        >Foto do veículo</label>
         <div class="control">
           <input
-            ref="fileInput"
             id="file"
+            ref="fileInput"
             type="file"
             class="input"
             @change="setFile"
@@ -17,12 +23,21 @@
           v-if="progress > 0"
           class="progress-container progress is-primary"
         >
-          <progress class="progress-bar" :value="progress" max="100">{{ progress }}%</progress>
+          <progress
+            class="progress-bar"
+            :value="progress"
+            max="100"
+          >
+            {{ progress }}%
+          </progress>
         </div>
       </div>
       <div class="field">
         <div class="control">
-          <button class="button is-link is-fullwidth" type="submit">
+          <button
+            class="button is-link is-fullwidth"
+            type="submit"
+          >
             Upload
           </button>
         </div>
@@ -112,7 +127,7 @@
     file.value = event.target.files[0];
 
     // Para enviar o arquivo logo após selecioná-lo:
-    uploadFile();
+    // uploadFile();
   }
 
   function getBlobChecksum() {
