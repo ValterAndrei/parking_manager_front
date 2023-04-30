@@ -2,7 +2,7 @@
   <section class="section">
     <div class="container">
       <div class="columns is-desktop">
-        <div class="column is-one-fifth">
+        <div class="column is-half">
           <div class="field">
             <label class="label">Placa do veículo</label>
             <div class="control">
@@ -68,6 +68,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </section>
 </template>
