@@ -168,4 +168,21 @@
       fileReader.readAsArrayBuffer(file.value);
     });
   }
+
+  function clearFields() {
+    file.value = null;
+    filePreview.value = null;
+    progress.value = 0;
+    directUploadUrl.value = null;
+    directUploadHeaders.value = {};
+    signedId.value = null;
+
+    // Também é possível limpar o input de arquivo:
+    const fileInput = document.getElementById('file');
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+
+  defineExpose({ clearFields });
 </script>

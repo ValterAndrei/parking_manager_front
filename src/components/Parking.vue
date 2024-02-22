@@ -28,6 +28,7 @@
           <div class="field">
             <div class="control">
               <UploadFile
+                ref="clearChildData"
                 @on-signed-id="setSignedId"
               />
             </div>
@@ -87,6 +88,7 @@
   const plate_input      = ref(null);
   const isLoading        = ref(false);
   const signedId         = ref(null);
+  const clearChildData   = ref(null);
 
   async function getCarList() {
     const response = await fetch(`${URL}`);
@@ -150,6 +152,7 @@
 
         plate_input.value.focus();
         plate.value = "";
+        clearChildData.value.clearFields(); // Limpa dos dados do componente de Upload.
         getCarList();
       }
     }
