@@ -19,14 +19,24 @@
           >
         </div>
 
+        <!-- Adicionando o elemento <img> para mostrar o preview da imagem -->
+        <img
+          v-if="file && filePreview"
+          :src="filePreview"
+          alt="Preview"
+          style="max-width: 100%; max-height: 100px; margin-top: 80px;"
+        >
+
         <div
           v-if="progress > 0"
           class="progress-container progress is-primary"
+          style="width: 100%; height: 20px; margin-top: 10px;"
         >
           <progress
             class="progress-bar"
             :value="progress"
             max="100"
+            style="width: 100%; height: 100%;"
           >
             {{ progress }}%
           </progress>
@@ -55,6 +65,7 @@
   const emit = defineEmits(['onSignedId']);
 
   const file                = ref(null);
+  const filePreview         = ref(null); // Referência para o preview da imagem
   const progress            = ref(0);
   const directUploadUrl     = ref(null);
   const directUploadHeaders = ref({});
@@ -128,6 +139,15 @@
 
     // Para enviar o arquivo logo após selecioná-lo:
     // uploadFile();
+
+    // Atualiza o preview da imagem
+    if (file.value) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        filePreview.value = e.target.result;
+      };
+      reader.readAsDataURL(file.value);
+    }
   }
 
   function getBlobChecksum() {
