@@ -5,6 +5,7 @@
         <th>Placa</th>
         <th>Reservas</th>
         <th>Controle</th>
+        <th>Foto do Veículo</th>
       </tr>
     </thead>
     <tbody
@@ -28,6 +29,13 @@
           >
             Remover
           </button>
+        </td>
+        <td>
+          <img
+            :src="car.photo_url ? car.photo_url : 'placeholder.jpg'"
+            alt="Foto do veículo"
+            style="max-width: 100px; max-height: 50px;"
+          >
         </td>
       </tr>
     </tbody>
